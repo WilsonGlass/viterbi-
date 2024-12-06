@@ -65,3 +65,45 @@ def test_2():
     assert best_path == expected_best_path, f"Expected best path {expected_best_path}, got {best_path}"
     assert pytest.approx(best_path_prob,
                          1e-12) == expected_best_prob, f"Expected best path probability ~{expected_best_prob}, got {best_path_prob}"
+
+def test_3():
+    states = ["s1", "s2", "s3", "s4", "s5", "s6", "s7"]
+    observations = ["obs_a", "obs_c", "obs_b", "obs_d", "obs_a", "obs_b", "obs_c"]
+
+    start_probs = {
+        "s1": 0.2,
+        "s2": 0.1,
+        "s3": 0.1,
+        "s4": 0.2,
+        "s5": 0.15,
+        "s6": 0.15,
+        "s7": 0.1
+    }
+
+    transition_probs = {
+        "s1": {"s1": 0.3, "s2": 0.1, "s3": 0.1, "s4": 0.2, "s5": 0.1, "s6": 0.1, "s7": 0.1},
+        "s2": {"s1": 0.2, "s2": 0.3, "s3": 0.1, "s4": 0.1, "s5": 0.1, "s6": 0.1, "s7": 0.1},
+        "s3": {"s1": 0.1, "s2": 0.2, "s3": 0.3, "s4": 0.1, "s5": 0.1, "s6": 0.1, "s7": 0.1},
+        "s4": {"s1": 0.1, "s2": 0.1, "s3": 0.1, "s4": 0.4, "s5": 0.1, "s6": 0.1, "s7": 0.1},
+        "s5": {"s1": 0.2, "s2": 0.1, "s3": 0.1, "s4": 0.1, "s5": 0.3, "s6": 0.1, "s7": 0.1},
+        "s6": {"s1": 0.1, "s2": 0.1, "s3": 0.1, "s4": 0.1, "s5": 0.1, "s6": 0.4, "s7": 0.1},
+        "s7": {"s1": 0.1, "s2": 0.1, "s3": 0.1, "s4": 0.1, "s5": 0.1, "s6": 0.1, "s7": 0.4}
+    }
+
+    emission_probs = {
+        "s1": {"obs_a": 0.4, "obs_b": 0.3, "obs_c": 0.2, "obs_d": 0.1},
+        "s2": {"obs_a": 0.2, "obs_b": 0.5, "obs_c": 0.2, "obs_d": 0.1},
+        "s3": {"obs_a": 0.3, "obs_b": 0.1, "obs_c": 0.5, "obs_d": 0.1},
+        "s4": {"obs_a": 0.25, "obs_b": 0.25, "obs_c": 0.25, "obs_d": 0.25},
+        "s5": {"obs_a": 0.3, "obs_b": 0.3, "obs_c": 0.2, "obs_d": 0.2},
+        "s6": {"obs_a": 0.1, "obs_b": 0.4, "obs_c": 0.4, "obs_d": 0.1},
+        "s7": {"obs_a": 0.2, "obs_b": 0.2, "obs_c": 0.2, "obs_d": 0.4}
+    }
+
+    best_path, best_path_prob = viterbi(observations, states, start_probs, transition_probs, emission_probs)
+    expected_best_path = ["s4", "s4", "s4", "s4", "s4", "s4", "s4"]
+    expected_best_prob = 5.0000000000000024e-08
+
+    assert best_path == expected_best_path, f"Expected best path {expected_best_path}, got {best_path}"
+    assert pytest.approx(best_path_prob,
+                         1e-12) == expected_best_prob, f"Expected best path probability ~{expected_best_prob}, got {best_path_prob}"
